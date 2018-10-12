@@ -1,0 +1,125 @@
+<html>
+<head>
+    <style>
+        .form {
+            width: 400px;
+            margin: 0 auto;
+        }
+        .form-item {
+            margin-bottom: 20px;
+        }
+        .value {
+            color: #807a7a;
+        }
+        .end-time {
+            width: 300px;
+            height: 32px;
+            border-radius: 4px;
+            border: 1px solid #aba5a5;
+        }
+        select {
+            width: 150px;
+            height: 32px;
+            font-size: 14px;
+
+        }
+        .form-button {
+            text-align: center;
+        }
+        button {
+            border-radius: 4px;
+        }
+        .submit {
+            padding: 4px 20px;
+            box-shadow: none;
+            color: #fff;
+            background-color: #1890ff;
+            border-color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <div class="form-item">
+            <span class="label">申请基站：</span>
+            <span class="value" id="value"> 3017</span>
+        </div>
+        <div class="form-item">
+            <span class="label">结束时间：</span>
+            <input type="text" readonly="readonly" id="end-time" class="end-time" />
+        
+        </div>
+        <div class="form-item">
+            <span class="label">申请项目：</span>
+            <select id="project">
+                <option>选项1</option>
+                <option>选项2</option>
+                <option>选项3</option>
+                <option>选项4</option>
+            </select>
+        </div>
+        <div class="form-button"><button class="submit">提交</button></div>
+    </div>
+
+    <div>饼图</div>
+    <div id="placeholder" style="width:600px;height:300px"></div>
+    
+    
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="./jquery.calendar.js"></script>
+
+<script language="javascript" type="text/javascript" src="jquery.flot.js"></script>  
+<script language="javascript" type="text/javascript" src="jquery.flot.pie.js"></script> 
+
+<script>
+$(document).ready(function(){
+    $(".end-time").showCalendar();
+
+    $("button").click(function(){
+        $.post("http://xxx.xxx",
+        {
+            jizhan: $("#value").html(),
+            endTime: $("#end-time").val(),
+            project: $("#project").val()
+        },
+        function(data,status){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+        });
+
+    // 下面是饼图的代码
+    var data = [  
+        { label: "苹果",  data: 10},  
+        { label: "香蕉",  data: 30},  
+        { label: "西瓜",  data: 90},  
+        { label: "葡萄",  data: 70},  
+        { label: "柑橘",  data: 80},  
+        { label: "菠萝",  data: 110}  
+    ];
+
+    $.plot($("#placeholder"), data, {  
+        series: {  
+                    pie: {   
+                        show: true,  
+                        radius: 1, //半径  
+                        label: {  
+                            show: true,  
+                            radius: 2/3,  
+                            formatter: function(label, series){  
+                                return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';  
+                        },  
+                        threshold: 0.03  //这个值小于0.03，也就是3%时，label就会隐藏  
+                    }  
+                }  
+            },  
+            legend: {  
+                show: true  
+            }  
+
+            
+    }); 
+});
+</script>
+
+</html>
